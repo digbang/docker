@@ -2,7 +2,6 @@ FROM php:7.1-fpm
 
 MAINTAINER Guido Contreras Woda <gcontreras@digbang.com>
 
-
 ENV BUILD_PACKAGES \
     libcurl4-openssl-dev \
     libfreetype6 \

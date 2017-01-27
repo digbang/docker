@@ -1,0 +1,16 @@
+#!/bin/bash
+for VERSION in 5.6 7.0 7.1
+do
+    echo "Building digbang/php:${VERSION}"
+
+    mkdir -p php/$VERSION
+    cp php/Dockerfile.template php/$VERSION/Dockerfile
+    sed -ri -e 's/%%VERSION%%/'"$VERSION"'/' php/$VERSION/Dockerfile
+
+    echo "Building digbang/php-dev:${VERSION}"
+
+    mkdir -p php-dev/$VERSION
+    cp php-dev/Dockerfile.template php-dev/$VERSION/Dockerfile
+    cp php-dev/xdebug.ini php-dev/$VERSION/xdebug.ini
+    sed -ri -e 's/%%VERSION%%/'"$VERSION"'/' php-dev/$VERSION/Dockerfile
+done
