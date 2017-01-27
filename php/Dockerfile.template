@@ -1,0 +1,37 @@
+FROM php:%%VERSION%%-fpm
+
+MAINTAINER Guido Contreras Woda <gcontreras@digbang.com>
+
+
+ENV BUILD_PACKAGES \
+    libcurl4-openssl-dev \
+    libfreetype6 \
+    libfreetype6-dev \
+    libjpeg-dev \
+    libjpeg62-turbo \
+    libjpeg62-turbo-dev \
+    libmcrypt-dev \
+    libmemcached-dev \
+    libncurses5-dev \
+    libpng-dev \
+    libpng12-0 \
+    libpng12-dev \
+    libpq-dev \
+    libtidy-dev \
+    libxml2-dev \
+    libz-dev \
+    zlib1g-dev
+
+RUN apt-get update \
+    && apt-get install -y $BUILD_PACKAGES \
+    && docker-php-ext-configure gd \
+        --enable-gd-native-ttf \
+        --with-jpeg-dir=/usr/lib/x86_64-linux-gnu \
+        --with-png-dir=/usr/lib/x86_64-linux-gnu \
+        --with-freetype-dir=/usr/lib/x86_64-linux-gnu \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install -j$(nproc) mcrypt \
+    && docker-php-ext-install -j$(nproc) pdo_pgsql \
+    && docker-php-ext-install -j$(nproc) tidy \
+    && docker-php-ext-install -j$(nproc) zip
+
