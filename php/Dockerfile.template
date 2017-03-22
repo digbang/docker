@@ -1,4 +1,4 @@
-FROM php:%%VERSION%%-fpm
+FROM php:%%VERSION%%-apache
 
 MAINTAINER Guido Contreras Woda <gcontreras@digbang.com>
 

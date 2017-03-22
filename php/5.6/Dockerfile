@@ -1,4 +1,4 @@
-FROM php:5.6-fpm
+FROM php:5.6-apache
 
 MAINTAINER Guido Contreras Woda <gcontreras@digbang.com>
 
