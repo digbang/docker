@@ -42,3 +42,4 @@ RUN apt-get update \
     && apt-get remove -y $BUILD_PACKAGES \
     && rm -rf /var/lib/apt/lists/*
 
+RUN a2enmod ssl rewrite
