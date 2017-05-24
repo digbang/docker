@@ -11,6 +11,7 @@ ENV DEPENDENCIES \
 ENV BUILD_PACKAGES \
     libcurl4-openssl-dev \
     libfreetype6-dev \
+    libicu-dev \
     libjpeg-dev \
     libjpeg62-turbo-dev \
     libmagickwand-dev \
@@ -33,6 +34,7 @@ RUN apt-get update \
         --with-png-dir=/usr/lib/x86_64-linux-gnu \
         --with-freetype-dir=/usr/lib/x86_64-linux-gnu \
     && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install -j$(nproc) intl \
     && docker-php-ext-install -j$(nproc) mcrypt \
     && docker-php-ext-install -j$(nproc) pdo_pgsql \
     && docker-php-ext-install -j$(nproc) tidy \
