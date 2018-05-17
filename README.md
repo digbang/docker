@@ -10,7 +10,7 @@ Use docker-compose in dev environments:
 ```
 services:
   php:
-    image: digbang/php-dev:7.1
+    image: digbang/php-dev:7.2
     volumes:
       - .:/var/www/html
       - ./docker/apache:/etc/apache2/sites-enabled:ro
