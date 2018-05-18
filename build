@@ -4,7 +4,7 @@ do
     echo "Building digbang/php:${VERSION}"
 
     mkdir -p php/$VERSION
-    cp php/Dockerfile.template php/$VERSION/Dockerfile
+    cp php/Dockerfile_$VERSION.template php/$VERSION/Dockerfile
     sed -ri -e 's/%%VERSION%%/'"$VERSION"'/' php/$VERSION/Dockerfile
 
     echo "Building digbang/php-dev:${VERSION}"

@@ -6,9 +6,7 @@ ENV DEPENDENCIES \
 	imagemagick \
     libfreetype6 \
     libjpeg62-turbo \
-    libpng12-0 \
-    locales \
-    locales-all
+    libpng12-0
 
 ENV BUILD_PACKAGES \
     libcurl4-openssl-dev \
@@ -35,13 +33,11 @@ RUN apt-get update \
         --with-jpeg-dir=/usr/lib/x86_64-linux-gnu \
         --with-png-dir=/usr/lib/x86_64-linux-gnu \
         --with-freetype-dir=/usr/lib/x86_64-linux-gnu \
-    && docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install -j$(nproc) intl \
     && docker-php-ext-install -j$(nproc) mcrypt \
     && docker-php-ext-install -j$(nproc) pdo_mysql \
     && docker-php-ext-install -j$(nproc) pdo_pgsql \
-    && docker-php-ext-install -j$(nproc) soap \
     && docker-php-ext-install -j$(nproc) tidy \
     && docker-php-ext-install -j$(nproc) zip \
     && pecl install imagick \

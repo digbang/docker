@@ -6,7 +6,8 @@ ENV DEPENDENCIES \
 	imagemagick \
     libfreetype6 \
     libjpeg62-turbo \
-    libpng12-0
+    locales \
+    locales-all
 
 ENV BUILD_PACKAGES \
     libcurl4-openssl-dev \
@@ -19,13 +20,10 @@ ENV BUILD_PACKAGES \
     libmemcached-dev \
     libncurses5-dev \
     libpng-dev \
-    libpng12-dev \
     libpq-dev \
     libtidy-dev \
     libxml2-dev \
     libz-dev \
-    locales \
-    locales-all \
     zlib1g-dev
 
 RUN apt-get update \
@@ -38,13 +36,11 @@ RUN apt-get update \
     && docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install -j$(nproc) intl \
-    && docker-php-ext-install -j$(nproc) mcrypt \
     && docker-php-ext-install -j$(nproc) pdo_mysql \
     && docker-php-ext-install -j$(nproc) pdo_pgsql \
     && docker-php-ext-install -j$(nproc) soap \
     && docker-php-ext-install -j$(nproc) tidy \
     && docker-php-ext-install -j$(nproc) zip \
-    && docker-php-ext-configure intl \
     && pecl install imagick \
     && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/imagick.ini \
     && apt-get remove -y $BUILD_PACKAGES \
