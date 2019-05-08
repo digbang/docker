@@ -1,4 +1,4 @@
-FROM digbang/php:7.0
+FROM digbang/php:7.3
 
 MAINTAINER Dario Govergun <dgovergun@digbang.com>
 

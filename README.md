@@ -30,4 +30,4 @@ The digbang/php image does not include debugging tools or composer, which makes 
 ## Contributing
 This repository has 2 `Dockerfile.template` files, one for the `digbang/php` image and one for the `digbang/php-dev` image, that extends the former.
 To edit this images, *always edit the template file* and run `./build` to generate a `Dockerfile` for each PHP version supported.
-
+> Remember to add the new version to the build command.
