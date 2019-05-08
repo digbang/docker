@@ -25,7 +25,9 @@ ENV BUILD_PACKAGES \
     libxml2-dev \
     libz-dev \
     libzip-dev \
-    zlib1g-dev
+    zlib1g-dev \
+    zip \
+    unzip
 
 RUN apt-get update \
     && apt-get install -y $DEPENDENCIES $BUILD_PACKAGES \
