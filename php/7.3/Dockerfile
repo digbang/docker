@@ -24,6 +24,7 @@ ENV BUILD_PACKAGES \
     libtidy-dev \
     libxml2-dev \
     libz-dev \
+    libzip-dev \
     zlib1g-dev
 
 RUN apt-get update \
