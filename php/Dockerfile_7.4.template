@@ -1,0 +1,57 @@
+FROM php:%%VERSION%%-apache
+
+MAINTAINER Dario Govergun <dgovergun@digbang.com>
+
+ENV DEPENDENCIES \
+    git \
+	imagemagick \
+	libjpeg62-turbo \
+	libfreetype6 \
+	libpng-dev \
+    locales \
+    locales-all \
+    unzip \
+    zip \
+    zlib1g-dev
+
+ENV BUILD_PACKAGES \
+    libcurl4-openssl-dev \
+    libfreetype6-dev \
+    libicu-dev \
+    libjpeg-dev \
+    libjpeg62-turbo-dev \
+    libmagickwand-dev \
+    libmcrypt-dev \
+    libmemcached-dev \
+    libncurses5-dev \
+    libonig-dev \
+    libpq-dev \
+    libtidy-dev \
+    libwebp-dev \
+    libxml2-dev \
+    libxpm-dev \
+    libz-dev \
+    libzip-dev
+
+RUN apt-get update \
+    && apt-get install -y $DEPENDENCIES $BUILD_PACKAGES \
+    && docker-php-ext-configure gd \
+        --enable-gd \
+        --with-webp \
+        --with-jpeg \
+        --with-xpm \
+        --with-freetype \
+    && docker-php-ext-install -j$(nproc) bcmath \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install -j$(nproc) intl \
+    && docker-php-ext-install -j$(nproc) pdo_mysql \
+    && docker-php-ext-install -j$(nproc) pdo_pgsql \
+    && docker-php-ext-install -j$(nproc) soap \
+    && docker-php-ext-install -j$(nproc) tidy \
+    && docker-php-ext-install -j$(nproc) zip \
+    && pecl install imagick \
+    && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/imagick.ini \
+    && apt-get remove -y $BUILD_PACKAGES \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN a2enmod ssl rewrite
