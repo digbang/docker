@@ -46,11 +46,14 @@ RUN apt-get update \
     && docker-php-ext-install -j$(nproc) intl \
     && docker-php-ext-install -j$(nproc) pdo_mysql \
     && docker-php-ext-install -j$(nproc) pdo_pgsql \
+    && docker-php-ext-install -j$(nproc) opcache \
     && docker-php-ext-install -j$(nproc) soap \
     && docker-php-ext-install -j$(nproc) tidy \
     && docker-php-ext-install -j$(nproc) zip \
     && pecl install imagick \
     && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/imagick.ini \
+    && pecl install redis \
+    && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini \
     && apt-get remove -y $BUILD_PACKAGES \
     && rm -rf /var/lib/apt/lists/*
 
