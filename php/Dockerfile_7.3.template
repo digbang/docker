@@ -50,13 +50,13 @@ RUN docker-php-ext-install \
     -j$(nproc) zip \
     -j$(nproc) opcache
 
-# 5. configure gd
+# 4. configure gd
 RUN docker-php-ext-configure gd \
     --with-jpeg-dir=/usr/lib/x86_64-linux-gnu \
     --with-png-dir=/usr/lib/x86_64-linux-gnu \
     --with-freetype-dir=/usr/lib/x86_64-linux-gnu
 
-# 6. pecl extensions
+# 5. pecl extensions
 RUN pecl install \
     imagick \
     redis \
@@ -66,5 +66,5 @@ RUN docker-php-ext-enable \
     imagick \
     redis
 
-# 7. clear cache
+# 6. clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

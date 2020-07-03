@@ -10,10 +10,10 @@ RUN apt-get update && apt-get install -y ssl-cert
 COPY conf.d/docker-php-ext-opcache.ini /usr/local/etc/php/conf.d/
 COPY conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/
 
-# 4. composer, then require packages
+# 3. composer, then require packages
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN /usr/bin/composer global require hirak/prestissimo
 
-# 5. clear cache
+# 4. clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
