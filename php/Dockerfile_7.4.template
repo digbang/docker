@@ -65,7 +65,8 @@ RUN docker-php-ext-configure gd \
 # 6. pecl extensions
 RUN pecl install \
     imagick \
-    redis
+    redis \
+    xdebug
 
 RUN docker-php-ext-enable \
     imagick \
