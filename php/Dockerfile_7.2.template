@@ -49,7 +49,6 @@ RUN docker-php-ext-install \
 
 # 5. configure gd
 RUN docker-php-ext-configure gd \
-    --enable-gd-native-ttf \
     --with-jpeg-dir=/usr/lib/x86_64-linux-gnu \
     --with-png-dir=/usr/lib/x86_64-linux-gnu \
     --with-freetype-dir=/usr/lib/x86_64-linux-gnu
