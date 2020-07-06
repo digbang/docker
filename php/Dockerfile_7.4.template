@@ -1,7 +1,12 @@
 FROM php:%%VERSION%%-apache
 
-MAINTAINER Dario Govergun <dgovergun@digbang.com>
+LABEL version="1.0.0"
+LABEL maintainer="Dario Govergun <dgovergun@digbang.com>"
 
+# 1. mod_rewrite for URL rewrite and mod_headers for .htaccess extra headers like Access-Control-Allow-Origin
+RUN a2enmod ssl rewrite headers
+
+# 2. development packages
 ENV DEPENDENCIES \
     git \
 	imagemagick \
@@ -33,28 +38,39 @@ ENV BUILD_PACKAGES \
     libz-dev \
     libzip-dev
 
-RUN apt-get update \
-    && apt-get install -y $DEPENDENCIES $BUILD_PACKAGES \
-    && docker-php-ext-configure gd \
-        --enable-gd \
-        --with-webp \
-        --with-jpeg \
-        --with-xpm \
-        --with-freetype \
-    && docker-php-ext-install -j$(nproc) bcmath \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install -j$(nproc) intl \
-    && docker-php-ext-install -j$(nproc) pdo_mysql \
-    && docker-php-ext-install -j$(nproc) pdo_pgsql \
-    && docker-php-ext-install -j$(nproc) opcache \
-    && docker-php-ext-install -j$(nproc) soap \
-    && docker-php-ext-install -j$(nproc) tidy \
-    && docker-php-ext-install -j$(nproc) zip \
-    && pecl install imagick \
-    && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/imagick.ini \
-    && pecl install redis \
-    && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini \
-    && apt-get remove -y $BUILD_PACKAGES \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y $DEPENDENCIES $BUILD_PACKAGES
 
-RUN a2enmod ssl rewrite
+# 3. start with base php config, then add extensions
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+
+RUN docker-php-ext-install \
+    -j$(nproc) bcmath \
+    -j$(nproc) gd \
+    -j$(nproc) intl \
+    -j$(nproc) pdo_pgsql \
+    -j$(nproc) opcache \
+    -j$(nproc) soap \
+    -j$(nproc) zip \
+    -j$(nproc) opcache \
+    -j$(nproc) pcntl
+
+# 4. configure gd
+RUN docker-php-ext-configure gd \
+    --enable-gd \
+    --with-webp \
+    --with-jpeg \
+    --with-xpm \
+    --with-freetype
+
+# 5. pecl extensions
+RUN pecl install \
+    imagick \
+    redis \
+    xdebug
+
+RUN docker-php-ext-enable \
+    imagick \
+    redis
+
+# 6. clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*

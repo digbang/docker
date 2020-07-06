@@ -1,7 +1,12 @@
 FROM php:7.2-apache
 
-MAINTAINER Dario Govergun <dgovergun@digbang.com>
+LABEL version="1.0.0"
+LABEL maintainer="Dario Govergun <dgovergun@digbang.com>"
 
+# 1. mod_rewrite for URL rewrite and mod_headers for .htaccess extra headers like Access-Control-Allow-Origin
+RUN a2enmod ssl rewrite headers
+
+# 2. development packages
 ENV DEPENDENCIES \
 	imagemagick \
     libfreetype6 \
@@ -26,24 +31,35 @@ ENV BUILD_PACKAGES \
     libz-dev \
     zlib1g-dev
 
-RUN apt-get update \
-    && apt-get install -y $DEPENDENCIES $BUILD_PACKAGES \
-    && docker-php-ext-configure gd \
-        --enable-gd-native-ttf \
-        --with-jpeg-dir=/usr/lib/x86_64-linux-gnu \
-        --with-png-dir=/usr/lib/x86_64-linux-gnu \
-        --with-freetype-dir=/usr/lib/x86_64-linux-gnu \
-    && docker-php-ext-install -j$(nproc) bcmath \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install -j$(nproc) intl \
-    && docker-php-ext-install -j$(nproc) pdo_mysql \
-    && docker-php-ext-install -j$(nproc) pdo_pgsql \
-    && docker-php-ext-install -j$(nproc) soap \
-    && docker-php-ext-install -j$(nproc) tidy \
-    && docker-php-ext-install -j$(nproc) zip \
-    && pecl install imagick \
-    && echo "extension=imagick.so" > /usr/local/etc/php/conf.d/imagick.ini \
-    && apt-get remove -y $BUILD_PACKAGES \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y $DEPENDENCIES $BUILD_PACKAGES
 
-RUN a2enmod ssl rewrite
+# 3. start with base php config, then add extensions
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+
+RUN docker-php-ext-install \
+    -j$(nproc) bcmath \
+    -j$(nproc) gd \
+    -j$(nproc) intl \
+    -j$(nproc) pdo_mysql \
+    -j$(nproc) pdo_pgsql \
+    -j$(nproc) soap \
+    -j$(nproc) tidy \
+    -j$(nproc) zip \
+    -j$(nproc) opcache
+
+# 4. configure gd
+RUN docker-php-ext-configure gd \
+    --with-jpeg-dir=/usr/lib/x86_64-linux-gnu \
+    --with-png-dir=/usr/lib/x86_64-linux-gnu \
+    --with-freetype-dir=/usr/lib/x86_64-linux-gnu
+
+# 5. pecl extensions
+RUN pecl install \
+    imagick \
+    xdebug
+
+RUN docker-php-ext-enable \
+    imagick
+
+# 6. clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
