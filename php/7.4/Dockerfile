@@ -48,11 +48,10 @@ RUN docker-php-ext-install \
     -j$(nproc) gd \
     -j$(nproc) intl \
     -j$(nproc) pdo_pgsql \
-    -j$(nproc) opcache \
     -j$(nproc) soap \
+    -j$(nproc) tidy \
     -j$(nproc) zip \
-    -j$(nproc) opcache \
-    -j$(nproc) pcntl
+    -j$(nproc) opcache
 
 # 4. configure gd
 RUN docker-php-ext-configure gd \
@@ -63,6 +62,8 @@ RUN docker-php-ext-configure gd \
     --with-freetype
 
 # 5. pecl extensions
+RUN pecl config-set php_ini $PHP_INI_DIR
+
 RUN pecl install \
     imagick \
     redis \

@@ -45,7 +45,8 @@ RUN docker-php-ext-install \
     -j$(nproc) soap \
     -j$(nproc) tidy \
     -j$(nproc) zip \
-    -j$(nproc) opcache
+    -j$(nproc) opcache \
+    -j$(nproc) pcntl
 
 # 4. configure gd
 RUN docker-php-ext-configure gd \
@@ -54,6 +55,8 @@ RUN docker-php-ext-configure gd \
     --with-freetype-dir=/usr/lib/x86_64-linux-gnu
 
 # 5. pecl extensions
+RUN pecl config-set php_ini $PHP_INI_DIR
+
 RUN pecl install \
     imagick \
     xdebug
