@@ -4,6 +4,17 @@ Docker images for Digbang PHP projects
 ## Usage
 Images extend php-apache so that webserver is already embedded on the container.
 
+## Updates
+
+1. Change the `.template` files.
+2. Run the `build` command.
+3. Run `docker pull php:<version>-apache` (example: `docker pull php:7.4-apache`) on each of the versions you want to rebuild.
+4. Run `docker-compose up -d --build php` on each modified directory (First `php`, then `php-dev`).
+5. Run `docker commit <container> digbang/php:<version>` (example: `docker commit 74_php_1 digbang/php:7.4`).
+6. Run `docker commit <container> digbang/php-dev:<version>` (example: `docker commit 74_php_1 digbang/php-dev:7.4`).
+7. Run `docker push digbang/php:<version>` and/or `docker push digbang/php-dev:<version>` for each of the commits.
+
+
 ### Dev environments
 Use docker-compose in dev environments:
 

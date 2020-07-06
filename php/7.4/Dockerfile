@@ -47,11 +47,13 @@ RUN docker-php-ext-install \
     -j$(nproc) bcmath \
     -j$(nproc) gd \
     -j$(nproc) intl \
+    -j$(nproc) pdo_mysql \
     -j$(nproc) pdo_pgsql \
     -j$(nproc) soap \
     -j$(nproc) tidy \
     -j$(nproc) zip \
-    -j$(nproc) opcache
+    -j$(nproc) opcache \
+    -j$(nproc) pcntl
 
 # 4. configure gd
 RUN docker-php-ext-configure gd \
