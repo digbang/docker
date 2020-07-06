@@ -47,7 +47,6 @@ RUN docker-php-ext-install \
     -j$(nproc) bcmath \
     -j$(nproc) gd \
     -j$(nproc) intl \
-    -j$(nproc) pdo_mysql \
     -j$(nproc) pdo_pgsql \
     -j$(nproc) opcache \
     -j$(nproc) soap \
@@ -55,7 +54,7 @@ RUN docker-php-ext-install \
     -j$(nproc) opcache \
     -j$(nproc) pcntl
 
-# 5. configure gd
+# 4. configure gd
 RUN docker-php-ext-configure gd \
     --enable-gd \
     --with-webp \
@@ -63,14 +62,15 @@ RUN docker-php-ext-configure gd \
     --with-xpm \
     --with-freetype
 
-# 6. pecl extensions
+# 5. pecl extensions
 RUN pecl install \
     imagick \
-    redis
+    redis \
+    xdebug
 
 RUN docker-php-ext-enable \
     imagick \
     redis
 
-# 7. clear cache
+# 6. clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

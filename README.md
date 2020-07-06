@@ -10,11 +10,10 @@ Use docker-compose in dev environments:
 ```
 services:
   php:
-    image: digbang/php-dev:7.2
+    image: digbang/php-dev:7.4
     volumes:
       - .:/var/www/html
       - ./docker/apache:/etc/apache2/sites-enabled:ro
-      - ./docker/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini:ro
     ports:
       - "80:80"
 ```
