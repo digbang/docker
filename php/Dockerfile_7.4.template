@@ -68,8 +68,7 @@ RUN pecl config-set php_ini $PHP_INI_DIR
 
 RUN pecl install \
     imagick \
-    redis \
-    xdebug
+    redis
 
 RUN docker-php-ext-enable \
     imagick \

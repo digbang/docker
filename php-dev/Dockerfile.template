@@ -6,13 +6,14 @@ LABEL maintainer="Dario Govergun <dgovergun@digbang.com>"
 # 1. SSL cert
 RUN apt-get update && apt-get install -y ssl-cert
 
-# 2. composer, then require packages
+# 2. xdebug
+RUN pecl install xdebug
+
+# 3. composer, then require packages
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN /usr/bin/composer global require hirak/prestissimo
-
-# 3. clear cache
+# 4. clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# 4. copy extension config files
+# 5. copy extension config files
 COPY conf.d /usr/local/etc/php/conf.d/
