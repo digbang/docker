@@ -1,0 +1,75 @@
+FROM php:8.0-apache
+
+LABEL version="1.0.0"
+LABEL maintainer="Dario Govergun <dgovergun@digbang.com>"
+
+# 1. mod_rewrite for URL rewrite and mod_headers for .htaccess extra headers like Access-Control-Allow-Origin
+RUN a2enmod ssl rewrite headers
+
+# 2. development packages
+ENV DEPENDENCIES \
+    git \
+	libjpeg62-turbo \
+	libfreetype6 \
+	libpng-dev \
+    locales \
+    locales-all \
+    unzip \
+    zip \
+    zlib1g-dev
+
+ENV BUILD_PACKAGES \
+    libcurl4-openssl-dev \
+    libfreetype6-dev \
+    libicu-dev \
+    libjpeg-dev \
+    libjpeg62-turbo-dev \
+    libmagickwand-dev \
+    libmcrypt-dev \
+    libmemcached-dev \
+    libncurses5-dev \
+    libonig-dev \
+    libpq-dev \
+    libtidy-dev \
+    libwebp-dev \
+    libxml2-dev \
+    libxpm-dev \
+    libz-dev \
+    libzip-dev
+
+RUN apt-get update && apt-get install -y $DEPENDENCIES $BUILD_PACKAGES apt-utils
+
+# 3. start with base php config, then add extensions
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+
+RUN docker-php-ext-install \
+    -j$(nproc) bcmath \
+    -j$(nproc) gd \
+    -j$(nproc) intl \
+    -j$(nproc) pdo_mysql \
+    -j$(nproc) pdo_pgsql \
+    -j$(nproc) soap \
+    -j$(nproc) tidy \
+    -j$(nproc) zip \
+    -j$(nproc) opcache \
+    -j$(nproc) pcntl
+
+# 4. configure gd
+RUN docker-php-ext-configure gd \
+    --enable-gd \
+    --with-webp \
+    --with-jpeg \
+    --with-xpm \
+    --with-freetype
+
+# 5. pecl extensions
+RUN pecl config-set php_ini $PHP_INI_DIR
+
+RUN pecl install \
+    redis
+
+RUN docker-php-ext-enable \
+    redis
+
+# 6. clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
