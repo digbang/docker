@@ -9,7 +9,6 @@ RUN a2enmod ssl rewrite headers
 # 2. development packages
 ENV DEPENDENCIES \
     git \
-	imagemagick \
 	libjpeg62-turbo \
 	libfreetype6 \
 	libpng-dev \
