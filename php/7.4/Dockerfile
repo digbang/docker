@@ -40,7 +40,18 @@ ENV BUILD_PACKAGES \
 
 RUN apt-get update && apt-get install -y $DEPENDENCIES $BUILD_PACKAGES
 
-# 3. start with base php config, then add extensions
+# 3. configure gd
+RUN docker-php-ext-configure gd \
+    --enable-gd \
+    --with-webp \
+    --with-jpeg \
+    --with-xpm \
+    --with-freetype
+    --with-jpeg-dir=/usr/lib/x86_64-linux-gnu \
+    --with-png-dir=/usr/lib/x86_64-linux-gnu \
+    --with-freetype-dir=/usr/lib/x86_64-linux-gnu
+
+# 4. start with base php config, then add extensions
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 RUN docker-php-ext-install \
@@ -54,14 +65,6 @@ RUN docker-php-ext-install \
     -j$(nproc) zip \
     -j$(nproc) opcache \
     -j$(nproc) pcntl
-
-# 4. configure gd
-RUN docker-php-ext-configure gd \
-    --enable-gd \
-    --with-webp \
-    --with-jpeg \
-    --with-xpm \
-    --with-freetype
 
 # 5. pecl extensions
 RUN pecl config-set php_ini $PHP_INI_DIR
