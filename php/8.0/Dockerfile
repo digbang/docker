@@ -9,6 +9,7 @@ RUN a2enmod ssl rewrite headers
 # 2. development packages
 ENV DEPENDENCIES \
     git \
+#    imagemagick \
 	libjpeg62-turbo \
 	libfreetype6 \
 	libpng-dev \
@@ -39,7 +40,15 @@ ENV BUILD_PACKAGES \
 
 RUN apt-get update && apt-get install -y $DEPENDENCIES $BUILD_PACKAGES apt-utils
 
-# 3. start with base php config, then add extensions
+# 3. configure gd
+RUN docker-php-ext-configure gd \
+    --enable-gd \
+    --with-webp \
+    --with-jpeg \
+    --with-xpm \
+    --with-freetype
+
+# 4. start with base php config, then add extensions
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 RUN docker-php-ext-install \
@@ -54,21 +63,15 @@ RUN docker-php-ext-install \
     -j$(nproc) opcache \
     -j$(nproc) pcntl
 
-# 4. configure gd
-RUN docker-php-ext-configure gd \
-    --enable-gd \
-    --with-webp \
-    --with-jpeg \
-    --with-xpm \
-    --with-freetype
-
 # 5. pecl extensions
 RUN pecl config-set php_ini $PHP_INI_DIR
 
 RUN pecl install \
+#    imagick \
     redis
 
 RUN docker-php-ext-enable \
+#    imagick \
     redis
 
 # 6. clear cache
