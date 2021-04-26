@@ -47,9 +47,6 @@ RUN docker-php-ext-configure gd \
     --with-jpeg \
     --with-xpm \
     --with-freetype
-    --with-jpeg-dir=/usr/lib/x86_64-linux-gnu \
-    --with-png-dir=/usr/lib/x86_64-linux-gnu \
-    --with-freetype-dir=/usr/lib/x86_64-linux-gnu
 
 # 4. start with base php config, then add extensions
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
