@@ -1,7 +1,7 @@
 FROM php:8.0-apache
 
 LABEL version="1.0.0"
-LABEL maintainer="Dario Govergun <dgovergun@digbang.com>"
+LABEL maintainer="Dario Govergun <dgovergun@digbang.com>, Mariano Filipoff <mfilipoff@digbang.com>"
 
 # 1. mod_rewrite for URL rewrite and mod_headers for .htaccess extra headers like Access-Control-Allow-Origin
 RUN a2enmod ssl rewrite headers
