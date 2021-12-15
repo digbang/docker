@@ -1,7 +1,7 @@
 FROM digbang/php:7.2
 
 LABEL version="1.0.0"
-LABEL maintainer="Dario Govergun <dgovergun@digbang.com>"
+LABEL maintainer="Dario Govergun <dgovergun@digbang.com>, Mariano Filipoff <mfilipoff@digbang.com>"
 
 # 1. SSL cert
 RUN apt-get update && apt-get install -y ssl-cert

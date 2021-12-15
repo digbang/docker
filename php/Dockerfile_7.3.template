@@ -1,7 +1,7 @@
 FROM php:%%VERSION%%-apache
 
 LABEL version="1.0.0"
-LABEL maintainer="Dario Govergun <dgovergun@digbang.com>"
+LABEL maintainer="Dario Govergun <dgovergun@digbang.com>, Mariano Filipoff <mfilipoff@digbang.com>"
 
 # 1. mod_rewrite for URL rewrite and mod_headers for .htaccess extra headers like Access-Control-Allow-Origin
 RUN a2enmod ssl rewrite headers
@@ -69,3 +69,6 @@ RUN docker-php-ext-enable \
 
 # 6. clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# 7. copy extension config files
+COPY conf.d /usr/local/etc/php/conf.d/

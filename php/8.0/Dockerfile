@@ -76,3 +76,6 @@ RUN docker-php-ext-enable \
 
 # 6. clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# 7. copy extension config files
+COPY conf.d /usr/local/etc/php/conf.d/
