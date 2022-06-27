@@ -1,4 +1,4 @@
-FROM php:%%VERSION%%-apache
+FROM php:8.0-apache
 
 LABEL version="1.0.0"
 LABEL maintainer="Dario Govergun <dgovergun@digbang.com>, Mariano Filipoff <mfilipoff@digbang.com>"
@@ -8,11 +8,15 @@ RUN a2enmod ssl rewrite headers
 
 # 2. development packages
 ENV DEPENDENCIES \
-	imagemagick \
-    libfreetype6 \
-    libjpeg62-turbo \
+    git \
+	libjpeg62-turbo \
+	libfreetype6 \
+	libpng-dev \
     locales \
-    locales-all
+    locales-all \
+    unzip \
+    zip \
+    zlib1g-dev
 
 ENV BUILD_PACKAGES \
     libcurl4-openssl-dev \
@@ -24,16 +28,26 @@ ENV BUILD_PACKAGES \
     libmcrypt-dev \
     libmemcached-dev \
     libncurses5-dev \
-    libpng-dev \
+    libonig-dev \
     libpq-dev \
     libtidy-dev \
+    libwebp-dev \
     libxml2-dev \
+    libxpm-dev \
     libz-dev \
-    zlib1g-dev
+    libzip-dev
 
-RUN apt-get update && apt-get install -y $DEPENDENCIES $BUILD_PACKAGES
+RUN apt-get update && apt-get install -y $DEPENDENCIES $BUILD_PACKAGES apt-utils
 
-# 3. start with base php config, then add extensions
+# 3. configure gd
+RUN docker-php-ext-configure gd \
+    --enable-gd \
+    --with-webp \
+    --with-jpeg \
+    --with-xpm \
+    --with-freetype
+
+# 4. start with base php config, then add extensions
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 RUN docker-php-ext-install \
@@ -48,21 +62,14 @@ RUN docker-php-ext-install \
     -j$(nproc) opcache \
     -j$(nproc) pcntl
 
-# 4. configure gd
-RUN docker-php-ext-configure gd \
-    --with-jpeg-dir=/usr/lib/x86_64-linux-gnu \
-    --with-png-dir=/usr/lib/x86_64-linux-gnu \
-    --with-freetype-dir=/usr/lib/x86_64-linux-gnu
-
 # 5. pecl extensions
 RUN pecl config-set php_ini $PHP_INI_DIR
 
 RUN pecl install \
-    imagick \
-    xdebug
+    redis
 
 RUN docker-php-ext-enable \
-    imagick
+    redis
 
 # 6. clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

@@ -1,5 +1,5 @@
 #!/bin/bash
-for VERSION in 7.4
+for VERSION in 7.4 8.0
 do
     echo "Building digbang/php:${VERSION}"
 
