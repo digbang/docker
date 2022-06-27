@@ -1,4 +1,4 @@
-FROM digbang/php:8.0
+FROM digbang/php:8.1
 
 LABEL version="1.0.0"
 LABEL maintainer="Dario Govergun <dgovergun@digbang.com>, Mariano Filipoff <mfilipoff@digbang.com>"
