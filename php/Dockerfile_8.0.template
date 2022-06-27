@@ -9,7 +9,6 @@ RUN a2enmod ssl rewrite headers
 # 2. development packages
 ENV DEPENDENCIES \
     git \
-#    imagemagick \
 	libjpeg62-turbo \
 	libfreetype6 \
 	libpng-dev \
@@ -67,11 +66,9 @@ RUN docker-php-ext-install \
 RUN pecl config-set php_ini $PHP_INI_DIR
 
 RUN pecl install \
-#    imagick \
     redis
 
 RUN docker-php-ext-enable \
-#    imagick \
     redis
 
 # 6. clear cache
