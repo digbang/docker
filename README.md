@@ -21,7 +21,7 @@ Use docker-compose in dev environments:
 ```
 services:
   php:
-    image: digbang/php-dev:7.4
+    image: digbang/php-dev:8.2-apache
     volumes:
       - .:/var/www/html
       - ./docker/apache:/etc/apache2/sites-enabled:ro
