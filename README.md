@@ -10,8 +10,8 @@ Images extend php-apache so that webserver is already embedded on the container.
 2. Run the `build` command.
 3. Run `docker pull php:<version>-apache` (example: `docker pull php:8.2-apache`) on each of the versions you want to rebuild.
 4. Run `docker-compose up -d --build php` on each modified directory (First `php`, then `php-dev`).
-5. Run `docker commit <container> digbang/php:<version>` (example: `docker commit 82-php-1 digbang/php:8.2`).
-6. Run `docker commit <container> digbang/php-dev:<version>` (example: `docker commit 82-php-1 digbang/php-dev:8.2`).
+5. Run `docker commit <container> digbang/php:<version>` (example: `docker commit 82-php-1 digbang/php:8.2-apache`).
+6. Run `docker commit <container> digbang/php-dev:<version>` (example: `docker commit 82-php-1 digbang/php-dev:8.2-apache`).
 7. Run `docker push digbang/php:<version>` and/or `docker push digbang/php-dev:<version>` for each of the commits.
 
 
