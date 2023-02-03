@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:1.23.3-alpine
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./:/var/www/html/
+    networks:
+      - app-network
+    working_dir: /var/www/html
+    command: nginx -g "daemon off;"
+    restart: unless-stopped
+    depends_on:
+      - php
+
+  php:
+    build: .
+    volumes:
+      - ./conf.d/:/usr/local/etc/php/conf.d/
+      - ./:/var/www/html/
+    networks:
+      - app-network
+    working_dir: /var/www/html
+
+networks:
+  app-network:
+    driver: bridge
