@@ -1,43 +1,46 @@
 # Digbang Docker
-Docker images for Digbang PHP projects
+Docker images for Digbang PHP projects.
 
 ## Usage
-Images extend php-apache so that webserver is already embedded on the container.
+We highly recommend reviewing the examples found in the **examples** directory of this repository to facilitate implementation. While specifically crafted for Laravel applications, these examples are easily adaptable.
 
-## Updates
+## Building images based on PHP-Apache
+As a reference, and using PHP 8.3 as an example, when mentioning:
 
-1. Change the `.template` files.
-2. Run the `build` command.
-3. Run `docker pull php:<version>-apache` (example: `docker pull php:8.2-apache`) on each of the versions you want to rebuild.
-4. Run `docker-compose up -d --build php` on each modified directory (First `php`, then `php-dev`).
-5. Run `docker commit <container> digbang/php:<version>` (example: `docker commit 82-apache-php-1 digbang/php:8.2-apache`).
-6. Run `docker commit <container> digbang/php-dev:<version>` (example: `docker commit 82-apache-php-1 digbang/php-dev:8.2-apache`).
-7. Run `docker push digbang/php:<version>` and/or `docker push digbang/php-dev:<version>` for each of the commits.
+`<container>` is equals to **83-apache-php-1**
 
+`<version>` is equals to **8.3-apache**
 
-### Dev environments
-Use docker-compose in dev environments:
+### Instructions
 
-```
-services:
-  php:
-    image: digbang/php-dev:8.2-apache
-    volumes:
-      - .:/var/www/html
-      - ./docker/apache:/etc/apache2/sites-enabled:ro
-    ports:
-      - "80:80"
-```
+1. Include the corresponding `<version>` in the **versions.txt** file.
+2. the `./build` command.
+3. `docker pull php:<version>` on each of the versions you want to rebuild.
+4. `docker-compose up -d --build php`. First in the **php** directory, then in **php-dev** directory.
+5. `docker commit <container> digbang/php:<version>`.
+6. `docker push digbang/php:<version>`.
+7. `docker commit <container> digbang/php-dev:<version>`.
+8. `docker push digbang/php-dev:<version>`.
 
-Mounted volumes correspond to code, apache vitualhost configurations and custom php.ini configurations. Both apache and php configurations are optional.
-Check provided extensions on the Dockerfile.
+## Building images based on PHP-FPM
+As a reference, and using PHP 8.3 as an example, when mentioning:
 
-### Live environments
-The digbang/php image does not include debugging tools or composer, which makes it more suitable for live environments.
+`<container>` is equals to **83-fpm-php-1**
 
-> This image has not been used in live deployments yet! Use at your own risk.
+`<version>` is equals to **8.3-fpm**
 
-## Contributing
-This repository has 2 `Dockerfile.template` files, one for the `digbang/php` image and one for the `digbang/php-dev` image, that extends the former.
-To edit this images, *always edit the template file* and run `./build` to generate a `Dockerfile` for each PHP version supported.
-> Remember to add the new version to the build command.
+### Instructions
+
+1. Include the corresponding `<version>` in the **versions.txt** file.
+1. the `./build` command.
+2. `docker pull php:<version>` on each of the versions you want to rebuild.
+3. `docker-compose up -d --build php`. First in the **php** directory, then in **php-dev** directory.
+4. `docker commit <container> digbang/php:<version>`.
+5. `docker push digbang/php:<version>`.
+6. `docker commit <container> digbang/php-dev:<version>`.
+7. `docker push digbang/php-dev:<version>`.
+
+## Disclaimer regarding production environments.
+The **digbang/php** images do not include debugging tools or Composer, making them more suitable for production environments.
+
+> Cautiously note that this image has not yet been utilized in live deployments. Proceed with caution and use at your own risk.

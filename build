@@ -1,15 +1,15 @@
 #!/bin/bash
-for VERSION in 7.4 8.1 8.2-apache
+for VERSION in $(grep -v '^$' versions.txt | xargs)
 do
-    echo "Building digbang/php:${VERSION}"
-
+    # PHP build
+    echo "Building digbang/php:${VERSION}..."
     mkdir -p php/$VERSION
-    cp php/Dockerfile_$VERSION.template php/$VERSION/Dockerfile
+    cp -r templates/php/* php/$VERSION
     sed -ri -e 's/%%VERSION%%/'"$VERSION"'/' php/$VERSION/Dockerfile
 
-    echo "Building digbang/php-dev:${VERSION}"
-
+    # PHP-DEV build
+    echo "Building digbang/php-dev:${VERSION}..."
     mkdir -p php-dev/$VERSION
-    cp php-dev/Dockerfile.template php-dev/$VERSION/Dockerfile
+    cp -r templates/php-dev/* php-dev/$VERSION
     sed -ri -e 's/%%VERSION%%/'"$VERSION"'/' php-dev/$VERSION/Dockerfile
 done
