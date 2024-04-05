@@ -52,7 +52,7 @@ RUN install-php-extensions \
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 
 # Set ownership of web root directory to www-data
-RUN chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /var/www
 
 # Set working directory
 WORKDIR /var/www/html
